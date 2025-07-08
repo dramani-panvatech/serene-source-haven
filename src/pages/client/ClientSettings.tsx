@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Settings as SettingsIcon, Bell, Lock, Eye, EyeOff } from 'lucide-react';
+import { Settings, Bell, Lock, Sparkles, Shield } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const ClientSettings = () => {
   const [notifications, setNotifications] = useState({
@@ -14,254 +15,154 @@ const ClientSettings = () => {
     push: true,
     marketing: false
   });
-
-  const [passwordData, setPasswordData] = useState({
+  const [passwords, setPasswords] = useState({
     current: '',
     new: '',
     confirm: ''
   });
+  const { toast } = useToast();
 
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    new: false,
-    confirm: false
-  });
-
-  const handleNotificationChange = (key: string, value: boolean) => {
-    setNotifications(prev => ({ ...prev, [key]: value }));
+  const handleNotificationChange = (type: string, value: boolean) => {
+    setNotifications(prev => ({ ...prev, [type]: value }));
+    toast({
+      title: "Settings Updated",
+      description: `${type} notifications ${value ? 'enabled' : 'disabled'}.`,
+    });
   };
 
-  const handlePasswordChange = (field: string, value: string) => {
-    setPasswordData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const togglePasswordVisibility = (field: string) => {
-    setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
-  };
-
-  const handlePasswordSubmit = () => {
-    if (passwordData.new !== passwordData.confirm) {
-      alert('New passwords do not match');
-      return;
-    }
-    console.log('Updating password...');
-    setPasswordData({ current: '', new: '', confirm: '' });
+  const handlePasswordChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Password change request');
+    toast({
+      title: "Password Updated",
+      description: "Your password has been successfully changed.",
+    });
+    setPasswords({ current: '', new: '', confirm: '' });
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center gap-3 mb-6">
-        <SettingsIcon className="h-8 w-8 text-blue-600" />
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Notification Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bell className="h-5 w-5 text-blue-500" />
-              Notification Preferences
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="email-notifications" className="text-base font-medium">
-                    Email Notifications
-                  </Label>
-                  <p className="text-sm text-gray-600">
-                    Receive appointment confirmations and updates via email
-                  </p>
-                </div>
-                <Switch
-                  id="email-notifications"
-                  checked={notifications.email}
-                  onCheckedChange={(checked) => handleNotificationChange('email', checked)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="sms-notifications" className="text-base font-medium">
-                    SMS Notifications
-                  </Label>
-                  <p className="text-sm text-gray-600">
-                    Get text message reminders for upcoming appointments
-                  </p>
-                </div>
-                <Switch
-                  id="sms-notifications"
-                  checked={notifications.sms}
-                  onCheckedChange={(checked) => handleNotificationChange('sms', checked)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="push-notifications" className="text-base font-medium">
-                    Push Notifications
-                  </Label>
-                  <p className="text-sm text-gray-600">
-                    Receive browser notifications for important updates
-                  </p>
-                </div>
-                <Switch
-                  id="push-notifications"
-                  checked={notifications.push}
-                  onCheckedChange={(checked) => handleNotificationChange('push', checked)}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="marketing-notifications" className="text-base font-medium">
-                    Marketing Updates
-                  </Label>
-                  <p className="text-sm text-gray-600">
-                    Receive promotional offers and special deals
-                  </p>
-                </div>
-                <Switch
-                  id="marketing-notifications"
-                  checked={notifications.marketing}
-                  onCheckedChange={(checked) => handleNotificationChange('marketing', checked)}
-                />
-              </div>
-            </div>
-
-            <Button className="w-full">
-              Save Notification Settings
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Password Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-red-500" />
-              Change Password
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="current-password">Current Password</Label>
-                <div className="relative">
-                  <Input
-                    id="current-password"
-                    type={showPasswords.current ? 'text' : 'password'}
-                    value={passwordData.current}
-                    onChange={(e) => handlePasswordChange('current', e.target.value)}
-                    placeholder="Enter current password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => togglePasswordVisibility('current')}
-                  >
-                    {showPasswords.current ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="new-password">New Password</Label>
-                <div className="relative">
-                  <Input
-                    id="new-password"
-                    type={showPasswords.new ? 'text' : 'password'}
-                    value={passwordData.new}
-                    onChange={(e) => handlePasswordChange('new', e.target.value)}
-                    placeholder="Enter new password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => togglePasswordVisibility('new')}
-                  >
-                    {showPasswords.new ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm New Password</Label>
-                <div className="relative">
-                  <Input
-                    id="confirm-password"
-                    type={showPasswords.confirm ? 'text' : 'password'}
-                    value={passwordData.confirm}
-                    onChange={(e) => handlePasswordChange('confirm', e.target.value)}
-                    placeholder="Confirm new password"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => togglePasswordVisibility('confirm')}
-                  >
-                    {showPasswords.confirm ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <p className="text-sm text-yellow-800">
-                <strong>Password Requirements:</strong>
-                <br />• At least 8 characters long
-                <br />• Include uppercase and lowercase letters
-                <br />• Include at least one number
-                <br />• Include at least one special character
-              </p>
-            </div>
-
-            <Button onClick={handlePasswordSubmit} className="w-full">
-              Update Password
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Additional Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Management</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button variant="outline">
-              Download My Data
-            </Button>
-            <Button variant="outline">
-              Deactivate Account
-            </Button>
-            <Button variant="destructive">
-              Delete Account
-            </Button>
+      <div className="relative z-10 p-6 space-y-6 animate-fade-in">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="animate-scale-in">
+            <Settings className="h-8 w-8 text-blue-600" />
           </div>
-        </CardContent>
-      </Card>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slide-in-right">
+            Settings
+          </h1>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Notification Settings */}
+          <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl hover-scale transition-all duration-300 animate-fade-in">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5 text-blue-500" />
+                Notification Preferences
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {Object.entries(notifications).map(([key, value], index) => (
+                <div key={key} className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg animate-slide-in-right" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <Label htmlFor={key} className="text-sm font-medium capitalize">
+                    {key === 'sms' ? 'SMS' : key} Notifications
+                  </Label>
+                  <Switch
+                    id={key}
+                    checked={value}
+                    onCheckedChange={(checked) => handleNotificationChange(key, checked)}
+                  />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          {/* Password Settings */}
+          <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl hover-scale transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Lock className="h-5 w-5 text-purple-500" />
+                Change Password
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="current">Current Password</Label>
+                  <Input
+                    id="current"
+                    type="password"
+                    value={passwords.current}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, current: e.target.value }))}
+                    className="border-2 focus:border-blue-500 transition-colors duration-300"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="new">New Password</Label>
+                  <Input
+                    id="new"
+                    type="password"
+                    value={passwords.new}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, new: e.target.value }))}
+                    className="border-2 focus:border-blue-500 transition-colors duration-300"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm">Confirm New Password</Label>
+                  <Input
+                    id="confirm"
+                    type="password"
+                    value={passwords.confirm}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, confirm: e.target.value }))}
+                    className="border-2 focus:border-blue-500 transition-colors duration-300"
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 hover-scale transition-all duration-300"
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  Update Password
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Additional Settings */}
+        <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl hover-scale transition-all duration-300 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-green-500" />
+              Account Preferences
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
+                <h3 className="font-semibold text-blue-800 mb-2">Privacy Settings</h3>
+                <p className="text-sm text-blue-600">Manage your data and privacy preferences</p>
+                <Button variant="outline" size="sm" className="mt-2 hover-scale transition-transform duration-200">
+                  Configure
+                </Button>
+              </div>
+              <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
+                <h3 className="font-semibold text-purple-800 mb-2">Account Data</h3>
+                <p className="text-sm text-purple-600">Export or delete your account data</p>
+                <Button variant="outline" size="sm" className="mt-2 hover-scale transition-transform duration-200">
+                  Manage
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

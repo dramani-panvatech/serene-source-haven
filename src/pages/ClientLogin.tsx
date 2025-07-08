@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Clock, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import ForgotPasswordDialog from '@/components/client/ForgotPasswordDialog';
+import ContactSupportDialog from '@/components/client/ContactSupportDialog';
 
 const ClientLogin = () => {
   const [email, setEmail] = useState('');
@@ -30,12 +32,13 @@ const ClientLogin = () => {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo/Branding with Animation */}
+        {/* Logo/Branding with Enhanced Animation */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-2xl animate-scale-in">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-2xl animate-scale-in hover-scale transition-all duration-500">
             <div className="relative">
               <Clock className="h-10 w-10 text-white" />
               <Sparkles className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse" />
@@ -85,12 +88,7 @@ const ClientLogin = () => {
               </div>
 
               <div className="flex items-center justify-between text-sm animate-fade-in" style={{ animationDelay: '0.6s' }}>
-                <button 
-                  type="button" 
-                  className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline"
-                >
-                  Forgot Password?
-                </button>
+                <ForgotPasswordDialog />
               </div>
 
               <Button 
@@ -113,7 +111,7 @@ const ClientLogin = () => {
         </Card>
 
         <div className="text-center mt-8 text-sm text-gray-600 animate-fade-in" style={{ animationDelay: '0.8s' }}>
-          Need help? <a href="#" className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline">Contact Support</a>
+          Need help? <ContactSupportDialog />
         </div>
       </div>
     </div>
