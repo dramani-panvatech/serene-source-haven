@@ -4,42 +4,62 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Clock } from 'lucide-react';
+import { Clock, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ClientLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt:', { email, password });
-    // Simulate login success
-    navigate('/client-dashboard');
+    setIsLoading(true);
+    
+    // Simulate loading with smooth transition
+    setTimeout(() => {
+      console.log('Login attempt:', { email, password });
+      navigate('/client-dashboard');
+    }, 1500);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-xl mb-4 shadow-lg">
-            <Clock className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        {/* Logo/Branding with Animation */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-2xl animate-scale-in">
+            <div className="relative">
+              <Clock className="h-10 w-10 text-white" />
+              <Sparkles className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-pulse" />
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Client Portal</h1>
-          <p className="text-gray-600 mt-2">Welcome back! Please sign in to your account.</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slide-in-right">
+            Client Portal
+          </h1>
+          <p className="text-gray-600 mt-3 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            Welcome back! Ready to book your next appointment?
+          </p>
         </div>
 
-        {/* Login Card */}
-        <Card className="shadow-xl border-0">
+        {/* Login Card with Enhanced Animation */}
+        <Card className="shadow-2xl border-0 backdrop-blur-sm bg-white/80 animate-fade-in hover-scale transition-all duration-500" style={{ animationDelay: '0.2s' }}>
           <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl font-semibold">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
+              Sign In
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2 animate-slide-in-right" style={{ animationDelay: '0.4s' }}>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</Label>
                 <Input
                   id="email"
                   type="email"
@@ -47,12 +67,12 @@ const ClientLogin = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-11"
+                  className="h-12 border-2 border-gray-200 focus:border-blue-500 transition-colors duration-300"
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+              <div className="space-y-2 animate-slide-in-right" style={{ animationDelay: '0.5s' }}>
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -60,25 +80,40 @@ const ClientLogin = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11"
+                  className="h-12 border-2 border-gray-200 focus:border-blue-500 transition-colors duration-300"
                 />
               </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <button type="button" className="text-blue-600 hover:text-blue-800 font-medium">
+              <div className="flex items-center justify-between text-sm animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                <button 
+                  type="button" 
+                  className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline"
+                >
                   Forgot Password?
                 </button>
               </div>
 
-              <Button type="submit" className="w-full h-11 text-base font-medium">
-                Sign In
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-medium bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover-scale animate-fade-in"
+                style={{ animationDelay: '0.7s' }}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Signing In...
+                  </div>
+                ) : (
+                  'Sign In'
+                )}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <div className="text-center mt-6 text-sm text-gray-600">
-          Need help? <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">Contact Support</a>
+        <div className="text-center mt-8 text-sm text-gray-600 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          Need help? <a href="#" className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 hover:underline">Contact Support</a>
         </div>
       </div>
     </div>
