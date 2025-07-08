@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -14,6 +15,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Gift,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -45,6 +47,7 @@ const AdminSidebar = ({ onWidthChange }: AdminSidebarProps) => {
     { title: 'Services', url: '/dashboard/services', icon: Package },
     { title: 'Payment', url: '/dashboard/payment', icon: CreditCard },
     { title: 'Settings', url: '/dashboard/settings', icon: Settings },
+    { title: 'Offering', url: '/dashboard/offering', icon: Gift },
     { title: 'Help', url: '/dashboard/help', icon: HelpCircle },
     { title: 'Profile', url: '/dashboard/profile', icon: User },
   ];

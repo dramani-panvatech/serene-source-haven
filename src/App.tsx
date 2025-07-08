@@ -15,6 +15,7 @@ import Provider from "./pages/Provider";
 import Services from "./pages/Services";
 import Payment from "./pages/Payment";
 import Settings from "./pages/Settings";
+import Offering from "./pages/Offering";
 import Help from "./pages/Help";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/dashboard/services" element={<Services />} />
           <Route path="/dashboard/payment" element={<Payment />} />
           <Route path="/dashboard/settings" element={<Settings />} />
+          <Route path="/dashboard/offering" element={<Offering />} />
           <Route path="/dashboard/help" element={<Help />} />
           <Route path="/dashboard/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
